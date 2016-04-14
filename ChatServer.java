@@ -183,6 +183,7 @@ public class ChatServer {
                 if (inStream != null) inStream.close();
                 if (socket != null) socket.close();
                 running = false;
+                clientList.remove(this);
                 return true;
             }
             catch (IOException ioe) {
@@ -203,7 +204,7 @@ public class ChatServer {
 
         // method to handle private message requests
         public void sendPrivateMessage(String msg) throws IOException {
-            String[] msgArray = msg.split(" ");
+            String[] msgArray = msg.split(" ", 4);
             String targetUser = msgArray[2];
             String message = msgArray[3];
             String datetime = getDatetimeGMT();
