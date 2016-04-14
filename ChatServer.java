@@ -4,12 +4,14 @@
  * Created by JeremyD on 4/13/2016.
  */
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
 import java.net.*;
 import java.io.*;
+import java.util.TimeZone;
 import java.util.concurrent.*;
 import java.util.ArrayList;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class ChatServer {
     public static final int port = 1337;
@@ -35,14 +37,31 @@ public class ChatServer {
             while(running) {
                 Socket client = sock.accept();
                 ClientConnection clientTask = new ClientConnection(client);
-                // check to make sure client is connected
+                // check to make sure client initialization worked
                 if (clientTask.isConnected())
+                    // protocol message 10
+                    broadcast("10 " + clientTask.getUsername() + "\r\n");
                     exec.execute(clientTask);
             }
         }
         catch (IOException ioe) {
             System.err.println(ioe);
         }
+    }
+
+    // broadcasts a message to every connected client
+    private void broadcast(String msg) throws IOException {
+        for (int i = 0; i < clientList.size(); i++) {
+            clientList.get(i).write(msg);
+        }
+    }
+
+    // helper method to get current GMT datetime
+    private String getDatetimeGMT() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss");
+        Date date = new Date();
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return dateFormat.format(date);
     }
 
     public static void main(String[] args) {
@@ -108,16 +127,19 @@ public class ChatServer {
                     switch (getMessageType(message)) {
                         // client requests username
                         case 0:
-                            usernameRequest(message);
+                            this.usernameRequest(message);
                             break;
                         // client sends general message
                         case 3:
+                            this.sendGeneralMessage(message);
                             break;
                         // client sends private message
                         case 4:
+                            this.sendPrivateMessage(message);
                             break;
                         // client sends disconnect message
                         case 7:
+                            this.disconnect();
                             break;
                         // otherwise, the message is malformed
                         default:
@@ -155,16 +177,65 @@ public class ChatServer {
         }
 
         // method to close the client connection
-        public void close() {
+        public boolean close() {
             try {
                 if (outStream != null) outStream.close();
                 if (inStream != null) inStream.close();
                 if (socket != null) socket.close();
                 running = false;
+                return true;
             }
             catch (IOException ioe) {
                 System.err.println("Error closing client connection: " + ioe);
+                return false;
             }
+        }
+
+        // PROTOCOL METHODS
+
+        // method to handle general message requests
+        public void sendGeneralMessage(String msg) throws IOException {
+            String message = msg.substring(msg.indexOf(" ") + 1);
+            String datetime = getDatetimeGMT();
+            // protocol message 5
+            broadcast("5 " + this.getUsername() + " " + datetime + " " + message + "\r\n");
+        }
+
+        // method to handle private message requests
+        public void sendPrivateMessage(String msg) throws IOException {
+            String[] msgArray = msg.split(" ");
+            String targetUser = msgArray[2];
+            String message = msgArray[3];
+            String datetime = getDatetimeGMT();
+            // find the target client
+            for (int i = 0; i < clientList.size(); i++) {
+                ClientConnection target = clientList.get(i);
+                if (target.getUsername().equals(targetUser)) {
+                    // protocol message 6
+                    target.write("6 " + this.getUsername() + " " + target.getUsername() + " " + datetime + " " + message + "\r\n");
+                    return;
+                }
+            }
+            // if execution reaches this point, the target client was not found
+            System.err.println("Target client not found");
+        }
+
+        // method to disconnect with proper protocol
+        public boolean disconnect() throws IOException {
+            boolean closed = this.close();
+
+            if (closed) {
+                // protocol message 9
+                broadcast("9 " + this.getUsername() + "\r\n");
+
+                // protocol message 8
+                this.write("8\r\n");
+            }
+            else {
+                System.err.println("Error disconnecting client");
+            }
+
+            return closed;
         }
 
         // parses a username request and sends back the appropriate response
@@ -180,6 +251,7 @@ public class ChatServer {
                     // check for duplicate username
                     for (int i = 0; i < clientList.size(); i++) {
                         if (clientList.get(i).getUsername().equals(name)) {
+                            // protocol message 2
                             this.write("2\r\n");
                             this.close();
                             return false;
@@ -193,8 +265,8 @@ public class ChatServer {
                         usernameList += clientList.get(i).getUsername();
                         if (i != clientList.size() - 1) usernameList += ",";
                     }
-                    // send response message
-                    outStream.write("1 " + usernameList + " " + "Welcome to the chat!\r\n");
+                    // protocol message 1
+                    this.write("1 " + usernameList + " " + "Welcome to the chat!\r\n");
                     this.username = name;
                 }
                 catch(StringIndexOutOfBoundsException iob) {
