@@ -1,0 +1,82 @@
+﻿@import 'grid';
+
+/* Coolors Exported Palette - coolors.co/5d576b-8884ff-d7bce8-e8cee4-fde2ff */
+
+$background: #5d576b; //rgba(93, 87, 107, 100)
+$accent: #8884ff; //rgba(136, 132, 255, 100)
+$secondary: #d7bce8; //rgba(215, 188, 232, 100)
+$warning: #e8cee4; //rgba(232, 206, 228, 100)
+//$primary: #fde2ff; //rgba(253, 226, 255, 100)
+$primary: white;
+
+@mixin button-color {
+	background-color: $accent;
+	border-color: $accent;
+	color: $primary;
+	border-style: solid;
+	&:hover {
+		background-color: darken($accent, 4%);
+		border-color: darken($accent, 4%);
+		outline: none;
+	}
+
+	&:focus, &:active {
+		outline: none;
+	}
+}
+
+body {
+	background-color: $background;
+}
+
+input[type=text] {
+	&:focus, &:active {
+		outline: none;
+	}
+}
+
+#login {
+	font-size: large;
+	width: 300px;
+	padding: 10px;
+	margin: auto;
+	margin-top: 10%;
+	text-align: center;
+	color: $primary;
+
+	input {
+		padding: 3px;
+		margin: auto;
+		margin-top: 7px;
+		margin-bottom: 7px;
+		width: 100%;
+		font-size: large;
+		border-radius: 5px;
+	}
+
+	button, input[type=submit] {
+		@include button-color;
+	}
+}
+
+#general_chat {
+	background-color: white;
+	height: 400px;
+	overflow: auto;
+	border-radius: 15px;
+}
+
+#general_chat_form {
+	margin-top: 10px;
+	input[type=text] {
+		border-radius: 5px 0px 0px 5px;
+	}
+	input[type=submit] {
+		border-radius: 0px 5px 5px 0px;
+		@include button-color;
+	}
+}
+
+.warning {
+	color: $primary;
+}

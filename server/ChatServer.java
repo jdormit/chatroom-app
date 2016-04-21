@@ -108,7 +108,9 @@ public class ChatServer {
             // perform username check
             try {
                 // if the username request is accepted, add the client to the client list
-                if (this.usernameRequest(inStream.readLine())) {
+				String initialRequest = inStream.readLine();
+				System.out.println("client: " + initialRequest);
+                if (this.usernameRequest(initialRequest)) {
                     clientList.add(this);
                 }
             }
@@ -123,6 +125,7 @@ public class ChatServer {
                 try {
                     // read incoming messages
                     message = inStream.readLine();
+					System.out.println("client: " + message);
                     // handle the incoming message based on message type
                     switch (getMessageType(message)) {
                         // client requests username
@@ -141,21 +144,26 @@ public class ChatServer {
                         case 7:
                             this.disconnect();
                             break;
+						// error getting message type
+						case -1:
+							System.err.println("Unknown message type. Closing connection");
+							this.close();
                         // otherwise, the message is malformed
                         default:
-                            this.write("Malformed message. Connection will be closed");
+                            System.err.println("Malformed message. Connection will be closed");
                             this.close();
                     }
                 }
                 catch (IOException ioe) {
-                    System.err.println("Unable to read message: " + ioe);
+                    System.err.println("Error reading from client stream. Connection will be closed");
+					this.close();
                 }
             }
         }
 
-        // accessor to check if connected
+        // accessor to check if socket is currently connected
         public boolean isConnected() {
-            return socket.isConnected();
+            return !socket.isClosed();
         }
 
         // accessor for username
@@ -184,6 +192,11 @@ public class ChatServer {
                 if (socket != null) socket.close();
                 running = false;
                 clientList.remove(this);
+				// check for duplicate username event
+				if (this.getUsername() == null)
+					return true;
+				// protocol message 9
+                broadcast("9 " + this.getUsername() + "\r\n");
                 return true;
             }
             catch (IOException ioe) {
@@ -211,7 +224,7 @@ public class ChatServer {
             // find the target client
             for (int i = 0; i < clientList.size(); i++) {
                 ClientConnection target = clientList.get(i);
-                if (target.getUsername().equals(targetUser)) {
+                if (target.getUsername().toLowerCase().equals(targetUser.toLowerCase())) {
                     // protocol message 6
                     target.write("6 " + this.getUsername() + " " + target.getUsername() + " " + datetime + " " + message + "\r\n");
                     return;
@@ -223,16 +236,12 @@ public class ChatServer {
 
         // method to disconnect with proper protocol
         public boolean disconnect() throws IOException {
-            boolean closed = this.close();
+			// protocol message 8
+            this.write("8\r\n");
+            
+			boolean closed = this.close();
 
-            if (closed) {
-                // protocol message 9
-                broadcast("9 " + this.getUsername() + "\r\n");
-
-                // protocol message 8
-                this.write("8\r\n");
-            }
-            else {
+            if (!closed) {
                 System.err.println("Error disconnecting client");
             }
 
@@ -251,7 +260,7 @@ public class ChatServer {
                     String name = req.substring(req.indexOf(" ") + 1);
                     // check for duplicate username
                     for (int i = 0; i < clientList.size(); i++) {
-                        if (clientList.get(i).getUsername().equals(name)) {
+                        if (clientList.get(i).getUsername().toLowerCase().equals(name.toLowerCase())) {
                             // protocol message 2
                             this.write("2\r\n");
                             this.close();
@@ -267,11 +276,11 @@ public class ChatServer {
                         if (i != clientList.size() - 1) usernameList += ",";
                     }
                     // protocol message 1
-                    this.write("1 " + usernameList + " " + "Welcome to the chat!\r\n");
+                    this.write("1 " + usernameList + " " + "Connected to chat\r\n");
                     this.username = name;
                 }
                 catch(StringIndexOutOfBoundsException iob) {
-                    outStream.write("Invalid username request. Closing connection");
+                    this.write("Invalid username request. Closing connection");
                     this.close();
                     return false;
                 }
@@ -288,6 +297,10 @@ public class ChatServer {
                 System.err.println("Invalid Message");
                 return -1;
             }
+			catch(NullPointerException npe) {
+				System.err.println("Null message. Closing connection");
+				return -1;
+			}
         }
     }
 }

@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Chat Client</title>
+		<link rel="stylesheet" href="css/style.css" />
+		<script type="text/javascript">
+			window.$ = window.jQuery = require('./js/jquery-2.2.3.min.js');
+		</script>
+		<script src="./index.js"></script>
+	</head>
+	<body>
+		<div class="container">
+			<div id="login">
+				<form id="username_form">
+					<label for="username">Desired Username</label>
+					<input type="text" id="username" maxlength='16' placeholder="Username"/>
+					<label for="ip_address">Server IP Address</label>
+					<input type="text" id="ip_address" value="127.0.0.1" />
+					<div id="username_warning" class="warning"></div>
+					<input type="submit" id="username_button" value="Join Chat"/>
+				</form>
+			</div>
+			<div id="client" hidden>
+				<div class="row">
+					<div id="user_list" class="col-2">
+						<label for="online_users">Users Online</label>
+						<ul id="online_users"></ul>
+					</div>
+					<div class="col-10">
+						<div class="row">
+							<div id="general_chat" class="col-8"></div>
+						</div>
+						<form id="general_chat_form">
+							<div class="row">
+								<input type="text" id="general_chat_input" class="col-6" placeholder="Say something" />
+								<input type="submit" id="general_chat_send" class="col-2" value="Send it!"/>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div id="private_chat"></div>
+				<button type="button" id="disconnect_button">Disconnect</button>
+			</div>
+		</div>
+	</body>
+</html>
