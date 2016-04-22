@@ -3,6 +3,7 @@
 var electron = require('electron');
 var app = electron.app;
 var BrowserWindow = electron.BrowserWindow;
+var localShortcut = require('electron-localshortcut');
 
 // electron code
 app.on('window-all-closed', function () {
@@ -14,7 +15,9 @@ app.on('ready', function () {
 	
 	mainWindow.setMenu(null);
 	
-	mainWindow.openDevTools();
+	localShortcut.register(mainWindow, 'Ctrl+Shift+I', function () { 
+		mainWindow.openDevTools();
+	});
 
 	mainWindow.loadURL('file://' + __dirname + '/client.html');
 	

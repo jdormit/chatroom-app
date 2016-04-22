@@ -9,6 +9,7 @@
   "author": "Jeremy Dormitzer",
   "license": "ISC",
   "dependencies": {
+    "electron-localshortcut": "^0.6.0",
     "jquery": "^2.2.3"
   }
 }

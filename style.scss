@@ -9,14 +9,15 @@ $warning: #e8cee4; //rgba(232, 206, 228, 100)
 //$primary: #fde2ff; //rgba(253, 226, 255, 100)
 $primary: white;
 
-@mixin button-color {
-	background-color: $accent;
-	border-color: $accent;
-	color: $primary;
+@mixin button-color($color: $accent, $text-color: white) {
+	background-color: $color;
+	border-color: $color;
+	color: $text-color;
 	border-style: solid;
+	text-align: center;
 	&:hover {
-		background-color: darken($accent, 4%);
-		border-color: darken($accent, 4%);
+		background-color: darken($color, 4%);
+		border-color: darken($color, 4%);
 		outline: none;
 	}
 
@@ -61,19 +62,165 @@ input[type=text] {
 
 #general_chat {
 	background-color: white;
-	height: 400px;
+	height: 576px;
 	overflow: auto;
-	border-radius: 15px;
+	border-radius: 10px 10px 0px 0px;
+	margin-top: 16px;
+	padding: 16px;
+	&::-webkit-scrollbar {
+		width: 12px;
+	}
+	&::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+	}
+ 
+	&::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+	}
 }
 
 #general_chat_form {
-	margin-top: 10px;
+	border-top: 1px solid $accent;
 	input[type=text] {
-		border-radius: 5px 0px 0px 5px;
+		overflow: visible;
+		border-style: solid;
+		border-color: white;
+		border-radius: 0px 0px 0px 5px;
+		padding: 5px 10px 5px 10px;
 	}
 	input[type=submit] {
-		border-radius: 0px 5px 5px 0px;
+		border-radius: 0px 0px 5px 0px;
+		padding: 5px 10px 5px 10px;
 		@include button-color;
+	}
+}
+
+#sidebar {
+	max-height: 639px;
+	padding: 15px;
+	overflow: auto;
+	&::-webkit-scrollbar {
+		width: 12px;
+	}
+	&::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+	}
+ 
+	&::-webkit-scrollbar-thumb {
+		background-color: $secondary;
+		border-radius: 10px;
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+	}
+}
+
+#disconnect_button {
+	@include button-color;
+	border-radius: 5px;
+	height: 30px;
+	padding: 3px;
+	margin-top: 6px;
+	width: 100%;
+}
+
+.close-private {
+	float: right;
+	width: 24px;
+	height: 24px;
+	text-align: center;
+	color: black;
+	padding: 2px;
+	border-top-right-radius: 5px;
+	@include button-color($secondary);
+}
+
+.private-div {
+	background-color: white;
+	margin-bottom: 16px;
+	margin-top: 16px;
+	border-radius: 5px;
+	&:last-child {
+		border-bottom: none;
+	}
+	label {
+		color: black;
+		padding: 8px;
+	}
+}
+
+#private_chat {
+	overflow: auto;
+	form {
+		border-top: 1px solid $accent;
+		input[type=text] {
+			border-style: solid;
+			border-color: white;
+			border-radius: 0px 0px 0px 5px;
+			padding: 5px 10px 5px 10px;
+			overflow: visible;
+		}
+		input[type=submit] {
+			border-radius: 0px 0px 5px 0px;
+			padding: 5px 10px 5px 10px;
+			@include button-color;
+		}
+	}
+}
+
+.private-message {
+	border-top: 1px solid $accent;
+	background-color: white;
+	height: 128px;
+	overflow: auto;
+	margin-top: 6px;
+	padding: 16px;
+	&::-webkit-scrollbar {
+		width: 12px;
+	}
+	&::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    border-radius: 10px;
+	}
+ 
+	&::-webkit-scrollbar-thumb {
+		border-radius: 10px;
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+		height: 10px;
+	}
+}
+
+label {
+	color: white;
+}
+
+#user_list {
+	ul {
+		text-align: center;
+		list-style-type: none;
+		padding: 0;
+		background-color: $secondary;
+		border-radius: 5px;
+		li {
+			padding: 8px 16px;
+			border-bottom: 1px solid $accent;
+			&:last-child {
+				border-bottom: none;
+			}
+			&:hover {
+				background-color: darken($secondary, 4%);
+				&:first-child {
+					border-radius: 5px 5px 0px 0px;
+				}
+				&:last-child {
+					border-radius: 0px 0px 5px 5px;
+				}
+				&:only-child {
+					border-radius: 5px;
+				}
+			}
+		}
 	}
 }
 

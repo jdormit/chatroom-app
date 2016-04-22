@@ -227,7 +227,8 @@ public class ChatServer {
                 if (target.getUsername().toLowerCase().equals(targetUser.toLowerCase())) {
                     // protocol message 6
                     target.write("6 " + this.getUsername() + " " + target.getUsername() + " " + datetime + " " + message + "\r\n");
-                    return;
+                    this.write("6 " + this.getUsername() + " " + target.getUsername() + " " + datetime + " " + message + "\r\n");
+					return;
                 }
             }
             // if execution reaches this point, the target client was not found

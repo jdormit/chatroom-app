@@ -77,7 +77,8 @@ input[type=text]:focus, input[type=text]:active {
     background-color: #8884ff;
     border-color: #8884ff;
     color: white;
-    border-style: solid; }
+    border-style: solid;
+    text-align: center; }
     #login button:hover, #login input[type=submit]:hover {
       background-color: #7470ff;
       border-color: #7470ff;
@@ -87,26 +88,170 @@ input[type=text]:focus, input[type=text]:active {
 
 #general_chat {
   background-color: white;
-  height: 400px;
+  height: 576px;
   overflow: auto;
-  border-radius: 15px; }
+  border-radius: 10px 10px 0px 0px;
+  margin-top: 16px;
+  padding: 16px; }
+  #general_chat::-webkit-scrollbar {
+    width: 12px; }
+  #general_chat::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px; }
+  #general_chat::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); }
 
 #general_chat_form {
-  margin-top: 10px; }
+  border-top: 1px solid #8884ff; }
   #general_chat_form input[type=text] {
-    border-radius: 5px 0px 0px 5px; }
+    overflow: visible;
+    border-style: solid;
+    border-color: white;
+    border-radius: 0px 0px 0px 5px;
+    padding: 5px 10px 5px 10px; }
   #general_chat_form input[type=submit] {
-    border-radius: 0px 5px 5px 0px;
+    border-radius: 0px 0px 5px 0px;
+    padding: 5px 10px 5px 10px;
     background-color: #8884ff;
     border-color: #8884ff;
     color: white;
-    border-style: solid; }
+    border-style: solid;
+    text-align: center; }
     #general_chat_form input[type=submit]:hover {
       background-color: #7470ff;
       border-color: #7470ff;
       outline: none; }
     #general_chat_form input[type=submit]:focus, #general_chat_form input[type=submit]:active {
       outline: none; }
+
+#sidebar {
+  max-height: 639px;
+  padding: 15px;
+  overflow: auto; }
+  #sidebar::-webkit-scrollbar {
+    width: 12px; }
+  #sidebar::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px; }
+  #sidebar::-webkit-scrollbar-thumb {
+    background-color: #d7bce8;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); }
+
+#disconnect_button {
+  background-color: #8884ff;
+  border-color: #8884ff;
+  color: white;
+  border-style: solid;
+  text-align: center;
+  border-radius: 5px;
+  height: 30px;
+  padding: 3px;
+  margin-top: 6px;
+  width: 100%; }
+  #disconnect_button:hover {
+    background-color: #7470ff;
+    border-color: #7470ff;
+    outline: none; }
+  #disconnect_button:focus, #disconnect_button:active {
+    outline: none; }
+
+.close-private {
+  float: right;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  color: black;
+  padding: 2px;
+  border-top-right-radius: 5px;
+  background-color: #d7bce8;
+  border-color: #d7bce8;
+  color: white;
+  border-style: solid;
+  text-align: center; }
+  .close-private:hover {
+    background-color: #ceade3;
+    border-color: #ceade3;
+    outline: none; }
+  .close-private:focus, .close-private:active {
+    outline: none; }
+
+.private-div {
+  background-color: white;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  border-radius: 5px; }
+  .private-div:last-child {
+    border-bottom: none; }
+  .private-div label {
+    color: black;
+    padding: 8px; }
+
+#private_chat {
+  overflow: auto; }
+  #private_chat form {
+    border-top: 1px solid #8884ff; }
+    #private_chat form input[type=text] {
+      border-style: solid;
+      border-color: white;
+      border-radius: 0px 0px 0px 5px;
+      padding: 5px 10px 5px 10px;
+      overflow: visible; }
+    #private_chat form input[type=submit] {
+      border-radius: 0px 0px 5px 0px;
+      padding: 5px 10px 5px 10px;
+      background-color: #8884ff;
+      border-color: #8884ff;
+      color: white;
+      border-style: solid;
+      text-align: center; }
+      #private_chat form input[type=submit]:hover {
+        background-color: #7470ff;
+        border-color: #7470ff;
+        outline: none; }
+      #private_chat form input[type=submit]:focus, #private_chat form input[type=submit]:active {
+        outline: none; }
+
+.private-message {
+  border-top: 1px solid #8884ff;
+  background-color: white;
+  height: 128px;
+  overflow: auto;
+  margin-top: 6px;
+  padding: 16px; }
+  .private-message::-webkit-scrollbar {
+    width: 12px; }
+  .private-message::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px; }
+  .private-message::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    height: 10px; }
+
+label {
+  color: white; }
+
+#user_list ul {
+  text-align: center;
+  list-style-type: none;
+  padding: 0;
+  background-color: #d7bce8;
+  border-radius: 5px; }
+  #user_list ul li {
+    padding: 8px 16px;
+    border-bottom: 1px solid #8884ff; }
+    #user_list ul li:last-child {
+      border-bottom: none; }
+    #user_list ul li:hover {
+      background-color: #ceade3; }
+      #user_list ul li:hover:first-child {
+        border-radius: 5px 5px 0px 0px; }
+      #user_list ul li:hover:last-child {
+        border-radius: 0px 0px 5px 5px; }
+      #user_list ul li:hover:only-child {
+        border-radius: 5px; }
 
 .warning {
   color: white; }

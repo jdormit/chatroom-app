@@ -15,7 +15,7 @@
 			<div id="login">
 				<form id="username_form">
 					<label for="username">Desired Username</label>
-					<input type="text" id="username" maxlength='16' placeholder="Username"/>
+					<input type="text" id="username" maxlength='16' placeholder="Username" autofocus/>
 					<label for="ip_address">Server IP Address</label>
 					<input type="text" id="ip_address" value="127.0.0.1" />
 					<div id="username_warning" class="warning"></div>
@@ -24,24 +24,25 @@
 			</div>
 			<div id="client" hidden>
 				<div class="row">
-					<div id="user_list" class="col-2">
-						<label for="online_users">Users Online</label>
-						<ul id="online_users"></ul>
-					</div>
-					<div class="col-10">
-						<div class="row">
-							<div id="general_chat" class="col-8"></div>
-						</div>
+					<div class="col-8">
+						<label for="general_chat">Public Chat</label>
+						<div id="general_chat"></div>
 						<form id="general_chat_form">
 							<div class="row">
-								<input type="text" id="general_chat_input" class="col-6" placeholder="Say something" />
+								<input type="text" id="general_chat_input" class="col-10" placeholder="Say something"/>
 								<input type="submit" id="general_chat_send" class="col-2" value="Send it!"/>
 							</div>
 						</form>
+						<button type="button" id="disconnect_button" class="col-8">Disconnect</button>
+					</div>
+					<div class="col-4" id="sidebar">
+						<div id="user_list">
+							<label for="online_users">Users Online</label>
+							<ul id="online_users"></ul>
+						</div>
+						<div id="private_chat"></div>
 					</div>
 				</div>
-				<div id="private_chat"></div>
-				<button type="button" id="disconnect_button">Disconnect</button>
 			</div>
 		</div>
 	</body>

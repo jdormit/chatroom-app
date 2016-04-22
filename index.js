@@ -19,7 +19,10 @@ $(document).ready(function () {
 			$('#username_warning').text("Please enter a username");
 		}
 		else if (username.indexOf(" ") != -1) {
-			$('#username_warning').text("Username may not contain spaces")
+			$('#username_warning').text("Username may not contain spaces");
+		}
+		else if (username.indexOf('"') != -1 || username.indexOf("'") != -1) {
+			$('#username_warning').text("Username contains forbidden characters");
 		}
 		else {
 			client = new net.Socket();
@@ -69,14 +72,16 @@ $(document).ready(function () {
 		var message = $('#' + target.toLowerCase() + "_input").val();
 		if (message !== "") {
 			client.write(protocol.privateMessage(username, target, message));
-			$('#' + target.toLowerCase() + "_message").append(new Date().toLocaleTimeString() + " " + username + " says:<br>");
-			$('#' + target.toLowerCase() + "_message").append(message + "<br><br>");
+			stickyScroll($('#' + target.toLowerCase() + "_message"), function () {
+				$('#' + target.toLowerCase() + "_message").append(new Date().toLocaleTimeString() + " " + username + " says:<br>");
+				$('#' + target.toLowerCase() + "_message").append(message + "<br><br>");
+			});
 		}
 		$('#' + target.toLowerCase() + "_input").val("");
 	});
 	
 	// handle closing private chats
-	$(document).on('click', '.close_private', function (event) {
+	$(document).on('click', '.close-private', function (event) {
 		$(this).parent().remove();
 	});
 	
@@ -107,6 +112,7 @@ function handleResponse(response) {
 			$('#username').val("");
 			$('#username_warning').empty();
 			$('#client').show();
+			$('#general_chat_input').focus();
 			break;
 		// server denies username
 		case '2':
@@ -125,8 +131,10 @@ function handleResponse(response) {
 			if (!privateDiv.length) {
 				privateDiv = createPrivateChat(response.fromUser);
 			}
-			$('#' + response.fromUser.toLowerCase() + "_message").append(new Date().toLocaleTimeString() + " " + response.fromUser + " says:<br>");
-			$('#' + response.fromUser.toLowerCase() + "_message").append(response.message + "<br><br>");
+			stickyScroll($('#' + response.fromUser.toLowerCase() + "_message"), function () {
+				$('#' + response.fromUser.toLowerCase() + "_message").append(new Date().toLocaleTimeString() + " " + response.fromUser + " says:<br>");
+				$('#' + response.fromUser.toLowerCase() + "_message").append(response.message + "<br><br>");
+			});
 			break;
 		// disconnect confirmation
 		case '8':
@@ -160,18 +168,22 @@ function displayOnlineUsers(userList) {
 function createPrivateChat(user) {
 	if (user.toLowerCase() == username.toLowerCase())
 		return;
-	var chatDiv = $('<div>', { 'id': user.toLowerCase() + "_private" });
-	chatDiv.append($('<h3>').text(user));
-	chatDiv.append($('<div>', { 'id': user.toLowerCase() + "_message" }));
+	var chatDiv = $('<div>', { 'id': user.toLowerCase() + "_private" }).addClass('private-div');
+	chatDiv.append($('<button>', { 'type': 'button' }).addClass('close-private').html('&times;'));
+	chatDiv.append($('<label>', { 'for': user.toLowerCase() + "_private" }).text("Conversation with " + user));
+	chatDiv.append($('<div>', { 'id': user.toLowerCase() + "_message" }).addClass('private-message'));
 	
 	var sendForm = $('<form>').addClass('private_form').data('user', user);
-	sendForm.append($('<input>', { 'type': 'text', 'placeholder': 'Say something', 'id': user.toLowerCase() + "_input" }));
-	sendForm.append($('<input>', { 'type': 'submit', 'value': 'Send it!' }).addClass('send_private'));
-	
+	var sendFormRow = $('<div>').addClass('row');
+	sendFormRow.append($('<input>', { 'type': 'text', 'placeholder': 'Say something', 'id': user.toLowerCase() + "_input" }).addClass('col-8'));
+	sendFormRow.append($('<input>', { 'type': 'submit', 'value': 'Send it!' }).addClass('send_private col-4'));
+	sendForm.append(sendFormRow);
+
 	chatDiv.append(sendForm);
-	chatDiv.append($('<button>', { 'type': 'button' }).addClass('close_private').text('Close'));
 	
 	$('#private_chat').append(chatDiv);
+	// scroll to bottom of private chat div
+	$('#private_chat').scrollTop($('#private_chat').prop('scrollHeight'));
 	return chatDiv;
 }
 
