@@ -52,7 +52,8 @@
 
 /* Coolors Exported Palette - coolors.co/5d576b-8884ff-d7bce8-e8cee4-fde2ff */
 body {
-  background-color: #5d576b; }
+  background-color: #5d576b;
+  cursor: default; }
 
 input[type=text]:focus, input[type=text]:active {
   outline: none; }
@@ -100,7 +101,10 @@ input[type=text]:focus, input[type=text]:active {
     border-radius: 10px; }
   #general_chat::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); }
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+    background-color: whitesmoke; }
+    #general_chat::-webkit-scrollbar-thumb:hover {
+      background-color: #ebebeb; }
 
 #general_chat_form {
   border-top: 1px solid #8884ff; }
@@ -125,20 +129,6 @@ input[type=text]:focus, input[type=text]:active {
     #general_chat_form input[type=submit]:focus, #general_chat_form input[type=submit]:active {
       outline: none; }
 
-#sidebar {
-  max-height: 639px;
-  padding: 15px;
-  overflow: auto; }
-  #sidebar::-webkit-scrollbar {
-    width: 12px; }
-  #sidebar::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-    border-radius: 10px; }
-  #sidebar::-webkit-scrollbar-thumb {
-    background-color: #d7bce8;
-    border-radius: 10px;
-    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); }
-
 #disconnect_button {
   background-color: #8884ff;
   border-color: #8884ff;
@@ -159,12 +149,14 @@ input[type=text]:focus, input[type=text]:active {
 
 .close-private {
   float: right;
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   text-align: center;
   color: black;
   padding: 2px;
   border-top-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  font-size: 20px;
   background-color: #d7bce8;
   border-color: #d7bce8;
   color: white;
@@ -184,12 +176,19 @@ input[type=text]:focus, input[type=text]:active {
   border-radius: 5px; }
   .private-div:last-child {
     border-bottom: none; }
-  .private-div label {
+  .private-div h5 {
     color: black;
-    padding: 8px; }
+    padding-top: 8px;
+    padding-left: 8px;
+    margin: 0px;
+    font-weight: normal;
+    font-size: inherit; }
 
 #private_chat {
-  overflow: auto; }
+  max-height: 400px;
+  overflow: auto;
+  border-radius: 5px;
+  padding-right: 6px; }
   #private_chat form {
     border-top: 1px solid #8884ff; }
     #private_chat form input[type=text] {
@@ -212,6 +211,17 @@ input[type=text]:focus, input[type=text]:active {
         outline: none; }
       #private_chat form input[type=submit]:focus, #private_chat form input[type=submit]:active {
         outline: none; }
+  #private_chat::-webkit-scrollbar {
+    width: 12px; }
+  #private_chat::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px; }
+  #private_chat::-webkit-scrollbar-thumb {
+    background-color: #d7bce8;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); }
+    #private_chat::-webkit-scrollbar-thumb:hover {
+      background-color: #ceade3; }
 
 .private-message {
   border-top: 1px solid #8884ff;
@@ -228,22 +238,44 @@ input[type=text]:focus, input[type=text]:active {
   .private-message::-webkit-scrollbar-thumb {
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-    height: 10px; }
+    height: 10px;
+    background-color: whitesmoke; }
+    .private-message::-webkit-scrollbar-thumb:hover {
+      background-color: #ebebeb; }
 
 label {
   color: white; }
 
 #user_list ul {
+  max-height: 200px;
+  overflow: auto;
   text-align: center;
   list-style-type: none;
   padding: 0;
-  background-color: #d7bce8;
+  padding-right: 6px;
   border-radius: 5px; }
+  #user_list ul::-webkit-scrollbar {
+    width: 12px; }
+  #user_list ul::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px; }
+  #user_list ul::-webkit-scrollbar-thumb {
+    background-color: #d7bce8;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); }
+    #user_list ul::-webkit-scrollbar-thumb:hover {
+      background-color: #ceade3; }
   #user_list ul li {
+    background-color: #d7bce8;
     padding: 8px 16px;
     border-bottom: 1px solid #8884ff; }
+    #user_list ul li:first-child {
+      border-radius: 5px 5px 0px 0px; }
     #user_list ul li:last-child {
-      border-bottom: none; }
+      border-bottom: none;
+      border-radius: 0px 0px 5px 5px; }
+    #user_list ul li:only-child {
+      border-radius: 5px; }
     #user_list ul li:hover {
       background-color: #ceade3; }
       #user_list ul li:hover:first-child {
@@ -252,6 +284,9 @@ label {
         border-radius: 0px 0px 5px 5px; }
       #user_list ul li:hover:only-child {
         border-radius: 5px; }
+
+.self {
+  background-color: #ceade3; }
 
 .warning {
   color: white; }

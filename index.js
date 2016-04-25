@@ -73,7 +73,7 @@ $(document).ready(function () {
 		if (message !== "") {
 			client.write(protocol.privateMessage(username, target, message));
 			stickyScroll($('#' + target.toLowerCase() + "_message"), function () {
-				$('#' + target.toLowerCase() + "_message").append(new Date().toLocaleTimeString() + " " + username + " says:<br>");
+				$('#' + target.toLowerCase() + "_message").append(new Date().toLocaleTimeString() + " you say:<br>");
 				$('#' + target.toLowerCase() + "_message").append(message + "<br><br>");
 			});
 		}
@@ -121,7 +121,10 @@ function handleResponse(response) {
 		// server sends general message
 		case '5':
 			stickyScroll($('#general_chat'), function () {
-				$('#general_chat').append(new Date().toLocaleTimeString() + " " + response.fromUser + " says:<br>");
+				if (response.fromUser.toLowerCase() === username.toLowerCase())
+					$('#general_chat').append(new Date().toLocaleTimeString() + " you say:<br>");
+				else
+					$('#general_chat').append(new Date().toLocaleTimeString() + " " + response.fromUser + " says:<br>");
 				$('#general_chat').append(response.message + "<br><br>");
 			});
 			break;
@@ -151,7 +154,10 @@ function handleResponse(response) {
 			break;
 		// other client connect notification
 		case '10':
-			$('#online_users').append($('<li>', {'id': response.user.toLowerCase(), 'data-user': response.user }).addClass('user').text(response.user));
+			if (response.user.toLowerCase() === username.toLowerCase())
+				$('#online_users').append($('<li>', { 'id': response.user.toLowerCase(), 'data-user': response.user }).addClass('user self').text(response.user + "(you)"));
+			else
+				$('#online_users').append($('<li>', { 'id': response.user.toLowerCase(), 'data-user': response.user }).addClass('user').text(response.user));
 			break;
 	}
 }
@@ -159,8 +165,10 @@ function handleResponse(response) {
 // function to display the online user list
 function displayOnlineUsers(userList) {
 	userList.forEach(function (value) {
-		if (value != "")
+		if (value != "" && value.toLowerCase() != username.toLowerCase())
 			$('#online_users').append($('<li>', { 'id': value.toLowerCase(), 'data-user': value }).addClass('user').text(value));
+		else if (value != "" && value.toLowerCase() == username.toLowerCase())
+			$('#online_users').append($('<li>', { 'id': value.toLowerCase(), 'data-user': value }).addClass('user self').text(value + " (you)"));
 	});
 }
 
@@ -170,7 +178,7 @@ function createPrivateChat(user) {
 		return;
 	var chatDiv = $('<div>', { 'id': user.toLowerCase() + "_private" }).addClass('private-div');
 	chatDiv.append($('<button>', { 'type': 'button' }).addClass('close-private').html('&times;'));
-	chatDiv.append($('<label>', { 'for': user.toLowerCase() + "_private" }).text("Conversation with " + user));
+	chatDiv.append($('<h5>', { 'for': user.toLowerCase() + "_private" }).text("Conversation with " + user));
 	chatDiv.append($('<div>', { 'id': user.toLowerCase() + "_message" }).addClass('private-message'));
 	
 	var sendForm = $('<form>').addClass('private_form').data('user', user);
