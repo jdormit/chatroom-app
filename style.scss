@@ -266,7 +266,7 @@ label {
 }
 
 .self {
-	background-color: darken($secondary, 4%);
+	background-color: darken($secondary, 4%) !important;
 }
 
 .warning {
