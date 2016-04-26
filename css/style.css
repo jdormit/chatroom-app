@@ -286,7 +286,7 @@ label {
         border-radius: 5px; }
 
 .self {
-  background-color: #ceade3; }
+  background-color: #ceade3 !important; }
 
 .warning {
   color: white; }
